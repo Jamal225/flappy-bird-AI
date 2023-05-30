@@ -6,6 +6,7 @@ from BIrd import Bird
 from Base import Base
 from Pipe import Pipe
 from constants import WIN_WIDTH, WIN_HEIGHT, STAT_FONT, BG_IMG
+import matplotlib.pyplot as plt
 
 
 def draw_window(win, birds, pipes, base, score, gen):
@@ -45,7 +46,7 @@ def main(genomes, config):
 
     run = True
     while run:
-        clock.tick(10000)
+        clock.tick(50)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
@@ -120,6 +121,19 @@ def run(path):
     p.add_reporter(stats)
 
     winner = p.run(main, 50)
+
+    generation = range(len(stats.generation_statistics))
+    avg_fitness = stats.get_fitness_mean()
+    max_fitness = stats.get_fitness_stat(max)
+
+    # Создание графика
+    plt.plot(generation, avg_fitness, label='Average Fitness')
+    plt.plot(generation, max_fitness, label='Max Fitness')
+    plt.xlabel('Generation')
+    plt.ylabel('Fitness')
+    plt.title('NEAT Training Progress')
+    plt.legend()
+    plt.show()
 
 
 if __name__ == '__main__':
