@@ -103,7 +103,7 @@ def main(genomes, config):
                 birds.pop(x)
                 nets.pop(x)
                 ge.pop(x)
-        if score > 30:
+        if score > 25:
             print(ge.pop())
             break
         base.move()
@@ -121,6 +121,16 @@ def run(path):
     p.add_reporter(stats)
 
     winner = p.run(main, 50)
+
+    import pickle
+
+    # Сохранение победителя в файл
+    with open('winner.pkl', 'wb') as f:
+        pickle.dump(winner, f)
+
+    # Восстановление победителя из файла
+    with open('winner.pkl', 'rb') as f:
+        winner = pickle.load(f)
 
     generation = range(len(stats.generation_statistics))
     avg_fitness = stats.get_fitness_mean()
